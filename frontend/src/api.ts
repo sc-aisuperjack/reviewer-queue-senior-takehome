@@ -19,7 +19,8 @@ export interface ReviewItem {
   summary: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8001";
 
 export async function fetchReviewItems(): Promise<ReviewItem[]> {
   const response = await fetch(`${API_BASE_URL}/review-items`);
@@ -33,15 +34,18 @@ export async function fetchReviewItems(): Promise<ReviewItem[]> {
 export async function applyReviewAction(
   itemId: string,
   action: ReviewAction,
-  reviewer: string
+  reviewer: string,
 ): Promise<ReviewItem> {
-  const response = await fetch(`${API_BASE_URL}/review-items/${itemId}/actions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
+  const response = await fetch(
+    `${API_BASE_URL}/review-items/${itemId}/actions`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ action, reviewer }),
     },
-    body: JSON.stringify({ action, reviewer })
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Action failed");
